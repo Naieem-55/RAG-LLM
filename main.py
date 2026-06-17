@@ -1,4 +1,3 @@
-import nltk
 import torch
 from tokenizer_utils import tokenize_text
 from bpe_tokenizer import get_bpe_tokenizer
