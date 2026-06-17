@@ -1,0 +1,12 @@
+Tokenization is an important step in natural language processing.
+Byte Pair Encoding, also known as BPE, is a subword tokenization algorithm.
+It starts with a vocabulary of individual characters and iteratively merges the most frequent pairs.
+This allows the model to handle rare words and out of vocabulary tokens effectively.
+Modern language models such as GPT and RoBERTa use BPE based tokenizers.
+The tokenizer learns merge rules from a training corpus.
+Each merge rule combines two symbols into a new symbol.
+The process repeats until the desired vocabulary size is reached.
+Subword tokenization balances vocabulary size and sequence length.
+Smaller vocabularies produce longer sequences and larger vocabularies produce shorter sequences.
+Tokenizers are a core part of any natural language processing pipeline.
+A good tokenizer improves model accuracy and training efficiency.
