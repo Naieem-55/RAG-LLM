@@ -39,7 +39,7 @@ else:
 
 
 #query
-query = "what is the working hour"
+query = input("Question: ")
 query_vector = embedding_model.encode([query]).astype('float32')
 
 distance, indices = index.search(query_vector, k = 1)
@@ -57,15 +57,26 @@ Question: {query}
 
 """
 
-response = requests.post(
-    "http://localhost:11434/api/generate",
-    json={
-        "model": "llama3",
-        "prompt": prompt,
-        "stream": False
-    },
-    timeout=60
-)
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2")
 
-print("\nLLM Answer:\n")
-print(response.json()["response"])
+try:
+    response = requests.post(
+        f"{OLLAMA_URL}/api/generate",
+        json={
+            "model": OLLAMA_MODEL,
+            "prompt": prompt,
+            "stream": False
+        },
+        timeout=120
+    )
+    response.raise_for_status()
+except requests.exceptions.ConnectionError:
+    raise SystemExit(f"Cannot reach Ollama at {OLLAMA_URL}. Is it running? Try: ollama serve")
+except requests.exceptions.HTTPError as e:
+    raise SystemExit(f"Ollama error: {e}. Pull the model first: ollama pull {OLLAMA_MODEL}")
+except requests.exceptions.Timeout:
+    raise SystemExit("Ollama request timed out after 120s.")
+
+print("\nQuestion: ", query)
+print("Answer: ", response.json()["response"])
